@@ -54,10 +54,25 @@ public class GDXAsteroids extends ApplicationAdapter
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
-		for (Entity curEntity : entities)
+		if(player.isFiring() && player.canShoot())
 		{
-		    curEntity.evaluateMovement();
-		    curEntity.render(shapeRenderer);
+		    Entity newBullet = player.shoot();
+		    entities.add(newBullet);
+		}
+		
+		for (int i = entities.size() - 1; i >= 0; i--)
+		{
+		    Entity curEntity = entities.get(i);
+		    
+		    boolean removeEntity = curEntity.evaluateMovement();
+		    if(!removeEntity)
+		    {
+		        curEntity.render(shapeRenderer);
+		    }
+		    else
+		    {
+		        entities.remove(i);
+		    }
 		}
 	}
 	

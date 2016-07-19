@@ -16,6 +16,7 @@ public abstract class Entity implements Renderable
     private float[] velocity;
     private float[] acceleration;
     private float resistanceFactor;
+    private boolean wrappable;
     
     public Entity(float x, float y)
     {
@@ -31,9 +32,10 @@ public abstract class Entity implements Renderable
         this.velocity = velocity;
         this.acceleration = acceleration;
         this.resistanceFactor = 0f;
+        this.wrappable = true;
     }
     
-    public void evaluateMovement()
+    public boolean evaluateMovement()
     {
         applyAcceleration();
         applyResistance();
@@ -42,7 +44,9 @@ public abstract class Entity implements Renderable
         x += velocity[0];
         y += velocity[1];
         
-        wrapEntity();
+        boolean removeEntity = wrapEntity();
+        
+        return removeEntity;
     }
     
     public float getX()
@@ -78,6 +82,11 @@ public abstract class Entity implements Renderable
     public float getResistanceFactor()
     {
         return resistanceFactor;
+    }
+    
+    public boolean getWrappable()
+    {
+        return wrappable;
     }
     
     public void setX(float x)
@@ -135,6 +144,11 @@ public abstract class Entity implements Renderable
         this.resistanceFactor = resistanceFactor;
     }
     
+    public void setWrappable(boolean wrappable)
+    {
+        this.wrappable = wrappable;
+    }
+    
     public void rotate(float orientationChange)
     {
         float newOrientation = orientation + orientationChange;
@@ -179,9 +193,9 @@ public abstract class Entity implements Renderable
      * of the screen (e.g. - if entity travels beyond left side of screen, have it reappear on the right side).
      * If entity is not wrappable, it will be removed from the game and disposed of.
      */
-    private void wrapEntity()
+    private boolean wrapEntity()
     {
-        //TODO CSH Implement wrappable option and disposal of non-wrappable objects that go off of screen.
+        boolean removeEntity = false;
         
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
@@ -199,22 +213,33 @@ public abstract class Entity implements Renderable
         lowerBound = lowerBound - (bufferFactor * upperBound);
         upperBound = upperBound + (bufferFactor * upperBound);
         
-        if (x < leftBound)
+        if (x < leftBound && wrappable)
         {
             x = rightBound;
         }
-        else if (x > rightBound)
+        else if (x > rightBound && wrappable)
         {
             x = leftBound;
         }
+        else if (x < leftBound || x > rightBound)
+        {
+            removeEntity = true;
+        }
         
-        if (y < lowerBound)
+        
+        if (y < lowerBound && wrappable)
         {
             y = upperBound;
         }
-        else if (y > upperBound)
+        else if (y > upperBound && wrappable)
         {
             y = lowerBound;
         }
+        else if (y < lowerBound || y > upperBound)
+        {
+            removeEntity = true;
+        }
+        
+        return removeEntity;
     }
 }

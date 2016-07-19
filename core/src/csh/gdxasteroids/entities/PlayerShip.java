@@ -2,6 +2,7 @@ package csh.gdxasteroids.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 import csh.gdxasteroids.GDXAsteroids;
@@ -11,11 +12,18 @@ public class PlayerShip extends Entity
     public static final float ROTATION_RATE = 4f;
     public static final float ACCELERATION_RATE = 0.02f;
     public static final float SHIP_RESISTANCE = 0.01f;
+    public static final float BULLET_SPEED = 1f;
+    public static final long SHOT_COOL_DOWN = 150; //Milliseconds
+    
+    private boolean isFiring;
+    private long lastShotTime;
     
     public PlayerShip()
     {
         super(GDXAsteroids.CAM_WIDTH / 2f, GDXAsteroids.CAM_HEIGHT / 2f * 0.75f);
         setResistanceFactor(SHIP_RESISTANCE);
+        isFiring = false;
+        lastShotTime = 0;
     }
     
     @Override
@@ -40,9 +48,41 @@ public class PlayerShip extends Entity
         shapeRenderer.end();
     }
     
-    public void fire()
+    public boolean canShoot()
     {
+        long curTime = System.currentTimeMillis();
+        long timeElapsed = curTime - lastShotTime;
+        boolean canShoot = timeElapsed > SHOT_COOL_DOWN;
         
+        return canShoot;
+    }
+    
+    public Bullet shoot()
+    {
+        float x0 = this.getX();
+        float y0 = this.getY();
+        
+        float orientation = getOrientation();
+        float[] v0 = new float[2];
+        v0[0] =  MathUtils.sinDeg(-orientation) * BULLET_SPEED;
+        v0[1] = MathUtils.cosDeg(-orientation) * BULLET_SPEED;
+        
+        Bullet newBullet = new Bullet(x0, y0);
+        newBullet.setVelocity(v0);
+        
+        lastShotTime = System.currentTimeMillis();
+        
+        return newBullet;
+    }
+    
+    public boolean isFiring()
+    {
+        return isFiring;
+    }
+    
+    public void setFiring(boolean isFiring)
+    {
+        this.isFiring = isFiring;
     }
     
     private void drawShip(ShapeRenderer shapeRenderer)
