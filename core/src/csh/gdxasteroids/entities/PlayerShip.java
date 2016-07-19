@@ -12,7 +12,7 @@ public class PlayerShip extends Entity
     public static final float ROTATION_RATE = 4f;
     public static final float ACCELERATION_RATE = 0.02f;
     public static final float SHIP_RESISTANCE = 0.01f;
-    public static final float BULLET_SPEED = 1f;
+    public static final float BULLET_SPEED = 0.75f;
     public static final long SHOT_COOL_DOWN = 150; //Milliseconds
     
     private boolean isFiring;
@@ -63,9 +63,10 @@ public class PlayerShip extends Entity
         float y0 = this.getY();
         
         float orientation = getOrientation();
+        float[] shipSpeed = this.getVelocity();
         float[] v0 = new float[2];
-        v0[0] =  MathUtils.sinDeg(-orientation) * BULLET_SPEED;
-        v0[1] = MathUtils.cosDeg(-orientation) * BULLET_SPEED;
+        v0[0] =  (MathUtils.sinDeg(-orientation) * BULLET_SPEED) + shipSpeed[0];
+        v0[1] = (MathUtils.cosDeg(-orientation) * BULLET_SPEED) + shipSpeed[1];
         
         Bullet newBullet = new Bullet(x0, y0);
         newBullet.setVelocity(v0);
