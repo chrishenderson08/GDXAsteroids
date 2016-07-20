@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
+import csh.gdxasteroids.entities.Asteroid;
 import csh.gdxasteroids.entities.Entity;
 import csh.gdxasteroids.entities.PlayerShip;
 import csh.gdxasteroids.io.ShipInputAdapter;
@@ -40,6 +41,12 @@ public class GDXAsteroids extends ApplicationAdapter
 	    //Create player's ship.
 	    player = new PlayerShip();
 	    entities.add(player);
+	    
+	    //TEST ASTEROID
+	    Entity asteroid = new Asteroid(75f, 25f);
+	    asteroid.setVelocity(new float[]{0.1f, 0.12f});
+	    asteroid.setAngularVelocity(2);
+	    entities.add(asteroid);
 	    
 	    //Input.
 	    inputProcessor = new ShipInputAdapter(player);
