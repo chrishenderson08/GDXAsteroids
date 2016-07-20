@@ -15,6 +15,7 @@ public abstract class Entity implements Renderable
     private float angularVelocity;
     private float[] velocity;
     private float[] acceleration;
+    private float accelerationRate;
     private float resistanceFactor;
     private boolean wrappable;
     
@@ -33,6 +34,7 @@ public abstract class Entity implements Renderable
         this.acceleration = acceleration;
         this.resistanceFactor = 0f;
         this.wrappable = true;
+        this.accelerationRate = 0f;
     }
     
     public boolean evaluateMovement()
@@ -84,9 +86,14 @@ public abstract class Entity implements Renderable
         return resistanceFactor;
     }
     
-    public boolean getWrappable()
+    public boolean isWrappable()
     {
         return wrappable;
+    }
+    
+    public float getAccelerationRate()
+    {
+        return accelerationRate;
     }
     
     public void setX(float x)
@@ -127,18 +134,6 @@ public abstract class Entity implements Renderable
         this.acceleration = acceleration;
     }
     
-    /**
-     * This setAcceleration method simply takes a scalar representing the
-     * rate of acceleration in the direction the entity is currently oriented.
-     * Acceleration vector is calculated for you.
-     * @param accelRate
-     */
-    public void setAcceleration(float accelRate)
-    {
-        acceleration[0] = MathUtils.sinDeg(-orientation) * accelRate;
-        acceleration[1] = MathUtils.cosDeg(-orientation) * accelRate;
-    }
-    
     public void setResistanceFactor(float resistanceFactor)
     {
         this.resistanceFactor = resistanceFactor;
@@ -147,6 +142,11 @@ public abstract class Entity implements Renderable
     public void setWrappable(boolean wrappable)
     {
         this.wrappable = wrappable;
+    }
+    
+    public void setAccelerationRate(float accelerationRate)
+    {
+        this.accelerationRate = accelerationRate;
     }
     
     public void rotate(float orientationChange)
@@ -161,6 +161,9 @@ public abstract class Entity implements Renderable
      */
     private void applyAcceleration()
     {
+        acceleration[0] = MathUtils.sinDeg(-orientation) * accelerationRate;
+        acceleration[1] = MathUtils.cosDeg(-orientation) * accelerationRate;
+        
         velocity[0] = (velocity[0] + acceleration[0]);
         velocity[1] = (velocity[1] + acceleration[1]);
         

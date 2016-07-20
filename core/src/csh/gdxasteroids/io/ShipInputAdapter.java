@@ -34,7 +34,7 @@ public class ShipInputAdapter extends InputAdapter
             //Start acceleration.
             case Keys.W:
             case Keys.UP:
-                playerShip.setAcceleration(PlayerShip.ACCELERATION_RATE);
+                playerShip.setAccelerationRate(PlayerShip.ACCELERATION_RATE);
                 break;
             case Keys.SPACE:
                 playerShip.setFiring(true);
@@ -71,7 +71,7 @@ public class ShipInputAdapter extends InputAdapter
             //Stop acceleration.
             case Keys.W:
             case Keys.UP:
-                playerShip.setAcceleration(0);
+                playerShip.setAccelerationRate(0);
                 break;
             case Keys.SPACE:
                 playerShip.setFiring(false);
