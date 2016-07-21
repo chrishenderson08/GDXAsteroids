@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
+import csh.gdxasteroids.GDXAsteroids;
+
 public class Asteroid extends Entity
 {
     private static final float SIZE_MEDIUM = 0.75f;
@@ -11,15 +13,16 @@ public class Asteroid extends Entity
     
     private float scaleFactor;
     
-    public Asteroid(float x, float y)
+    public Asteroid(GDXAsteroids engine, float x, float y)
     {
-        this(x, y, 1f);
+        this(engine, x, y, 1f);
     }
     
-    public Asteroid(float x, float y, float scaleFactor)
+    public Asteroid(GDXAsteroids engine, float x, float y, float scaleFactor)
     {
-        super(x, y);
+        super(engine, x, y);
         this.scaleFactor = scaleFactor;
+        setBoundingRadius(1.6f);
     }
 
     @Override
@@ -60,5 +63,27 @@ public class Asteroid extends Entity
         shapeRenderer.line(vert4, vert5);
         shapeRenderer.line(vert5, vert0);
         shapeRenderer.end();
+    }
+    
+    @Override
+    public float getBoundingRadius()
+    {
+        float radius = super.getBoundingRadius();
+        radius *= scaleFactor;
+        
+        return radius;
+    }
+
+    @Override
+    public void collisionAction()
+    {
+        
+    }
+
+    @Override
+    public boolean canCollide(Entity entity)
+    {
+        boolean canCollide = !(entity instanceof Asteroid);
+        return canCollide;
     }
 }

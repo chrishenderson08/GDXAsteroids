@@ -5,12 +5,14 @@ import com.badlogic.gdx.math.MathUtils;
 
 import csh.gdxasteroids.GDXAsteroids;
 
-public abstract class Entity implements Renderable
+public abstract class Entity implements Renderable, Collider
 {
     public static final float MAX_SPEED = 3;
     
+    private GDXAsteroids engine;
     private float x;
     private float y;
+    private float boundingRadius;
     private float orientation;
     private float angularVelocity;
     private float[] velocity;
@@ -19,15 +21,17 @@ public abstract class Entity implements Renderable
     private float resistanceFactor;
     private boolean wrappable;
     
-    public Entity(float x, float y)
+    public Entity(GDXAsteroids engine, float x, float y)
     {
-        this(x, y, 0f, 0f, new float[]{0f, 0f}, new float[]{0f, 0f});
+        this(engine, x, y, 0f, 0f, new float[]{0f, 0f}, new float[]{0f, 0f});
     }
     
-    public Entity(float x, float y, float orientation, float angularVelocity, float[] velocity, float[] acceleration)
+    public Entity(GDXAsteroids engine, float x, float y, float orientation, float angularVelocity, float[] velocity, float[] acceleration)
     {
+        this.engine = engine;
         this.x = x;
         this.y = y;
+        this.boundingRadius = 0f;
         this.orientation = orientation;
         this.angularVelocity = angularVelocity;
         this.velocity = velocity;
@@ -51,6 +55,11 @@ public abstract class Entity implements Renderable
         return removeEntity;
     }
     
+    public GDXAsteroids getEngine()
+    {
+        return engine;
+    }
+    
     public float getX()
     { 
         return x;
@@ -59,6 +68,11 @@ public abstract class Entity implements Renderable
     public float getY()
     { 
         return y;
+    }
+    
+    public float getBoundingRadius()
+    {
+        return boundingRadius;
     }
     
     public float getOrientation()
@@ -104,6 +118,11 @@ public abstract class Entity implements Renderable
     public void setY(float y)
     {
         this.y = y;
+    }
+    
+    public void setBoundingRadius(float boundingRadius)
+    {
+        this.boundingRadius = boundingRadius;
     }
     
     public void setOrientation(float orientation)

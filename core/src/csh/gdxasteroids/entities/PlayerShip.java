@@ -18,12 +18,13 @@ public class PlayerShip extends Entity
     private boolean isFiring;
     private long lastShotTime;
     
-    public PlayerShip()
+    public PlayerShip(GDXAsteroids engine)
     {
-        super(GDXAsteroids.CAM_WIDTH / 2f, GDXAsteroids.CAM_HEIGHT / 2f * 0.75f);
+        super(engine, GDXAsteroids.CAM_WIDTH / 2f, GDXAsteroids.CAM_HEIGHT / 2f * 0.75f);
         setResistanceFactor(SHIP_RESISTANCE);
         isFiring = false;
         lastShotTime = 0;
+        setBoundingRadius(1.8f);
     }
     
     @Override
@@ -57,7 +58,7 @@ public class PlayerShip extends Entity
         return canShoot;
     }
     
-    public Bullet shoot()
+    public void shoot()
     {
         float x0 = this.getX();
         float y0 = this.getY();
@@ -68,12 +69,13 @@ public class PlayerShip extends Entity
         v0[0] =  (MathUtils.sinDeg(-orientation) * BULLET_SPEED) + shipSpeed[0];
         v0[1] = (MathUtils.cosDeg(-orientation) * BULLET_SPEED) + shipSpeed[1];
         
-        Bullet newBullet = new Bullet(x0, y0);
+        Bullet newBullet = new Bullet(getEngine(), x0, y0);
         newBullet.setVelocity(v0);
         
         lastShotTime = System.currentTimeMillis();
         
-        return newBullet;
+        GDXAsteroids engine = getEngine();
+        engine.addEntity(newBullet);
     }
     
     public boolean isFiring()
@@ -112,5 +114,18 @@ public class PlayerShip extends Entity
             shapeRenderer.line(vert1, vert2);
             shapeRenderer.line(vert2, vert0);
         }
+    }
+
+    @Override
+    public void collisionAction()
+    {
+        
+    }
+
+    @Override
+    public boolean canCollide(Entity entity)
+    {
+        boolean canCollide = !(entity instanceof Bullet);
+        return canCollide;
     }
 }

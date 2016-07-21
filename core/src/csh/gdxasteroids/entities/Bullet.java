@@ -4,12 +4,15 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
+import csh.gdxasteroids.GDXAsteroids;
+
 public class Bullet extends Entity
 {
-    public Bullet(float x, float y)
+    public Bullet(GDXAsteroids engine, float x, float y)
     {
-        super(x, y);
+        super(engine, x, y);
         setWrappable(false);
+        setBoundingRadius(0.25f);
     }
     
     @Override
@@ -37,5 +40,17 @@ public class Bullet extends Entity
         shapeRenderer.line(vert1, vert2);
         shapeRenderer.line(vert2, vert0);
         shapeRenderer.end();
+    }
+
+    @Override
+    public void collisionAction()
+    {
+        
+    }
+
+    @Override
+    public boolean canCollide(Entity entity)
+    {
+        return true;
     }
 }

@@ -39,12 +39,12 @@ public class GDXAsteroids extends ApplicationAdapter
 	    entities = new ArrayList<Entity>();
 	    
 	    //Create player's ship.
-	    player = new PlayerShip();
+	    player = new PlayerShip(this);
 	    entities.add(player);
 	    
 	    //TEST ASTEROID
-	    Entity asteroid = new Asteroid(75f, 25f);
-	    asteroid.setVelocity(new float[]{0.1f, 0.12f});
+	    Entity asteroid = new Asteroid(this, 75f, 25f);
+	    asteroid.setVelocity(new float[]{0.0f, 0.1f});
 	    asteroid.setAngularVelocity(2);
 	    entities.add(asteroid);
 	    
@@ -63,23 +63,45 @@ public class GDXAsteroids extends ApplicationAdapter
 		
 		if(player.isFiring() && player.canShoot())
 		{
-		    Entity newBullet = player.shoot();
-		    entities.add(newBullet);
+		    player.shoot();
 		}
 		
-		for (int i = entities.size() - 1; i >= 0; i--)
+		List<Integer> entityRemovalIndices = new ArrayList<Integer>();
+		for (int i = 0; i < entities.size(); i++)
+        {
+		    Entity curEntity = entities.get(i);
+            
+            boolean removeEntity = curEntity.evaluateMovement();
+            if(removeEntity)
+            {
+                entityRemovalIndices.add(i);
+            }
+        }
+		
+		for (int i = 0; i < entities.size(); i++)
 		{
 		    Entity curEntity = entities.get(i);
+		    boolean removeEntity = entityRemovalIndices.contains(i);
 		    
-		    boolean removeEntity = curEntity.evaluateMovement();
-		    if(!removeEntity)
+		    if (!removeEntity)
+		    {
+		        removeEntity = checkCollisions(curEntity);
+		    }
+		    
+		    if (!removeEntity)
 		    {
 		        curEntity.render(shapeRenderer);
 		    }
-		    else
+		    else if(!entityRemovalIndices.contains(i))
 		    {
-		        entities.remove(i);
+		        entityRemovalIndices.add(i);
 		    }
+		}
+		
+		for (int i = entityRemovalIndices.size() - 1; i >= 0; i--)
+		{
+		    Integer curRemovalIndex = entityRemovalIndices.get(i);
+		    entities.remove(curRemovalIndex.intValue());
 		}
 	}
 	
@@ -99,5 +121,45 @@ public class GDXAsteroids extends ApplicationAdapter
 	    camera.viewportHeight = CAM_HEIGHT * (winHeight / winWidth);
 	    camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);	    
 	    camera.update();
+	}
+	
+	public void addEntity(Entity entity)
+	{
+	    if(entity != null)
+	    {
+	        entities.add(entity);
+	    }
+	}
+	
+	private boolean checkCollisions(Entity entity)
+	{
+	    //TODO CSH Weird things going on with collision detection.
+	    boolean collision = false;
+	    
+	    for (Entity curCheckedEntity : entities)
+	    {   
+	        if (entity != curCheckedEntity &&
+	            entity.canCollide(curCheckedEntity) &&
+	            curCheckedEntity.canCollide(entity))
+	        {
+	            double centerDistance = Math.sqrt(Math.pow(curCheckedEntity.getX() - entity.getX(), 2) +
+	                Math.pow(curCheckedEntity.getY() - entity.getY(), 2));
+	            
+	            double noCollisionDistance = entity.getBoundingRadius() + curCheckedEntity.getBoundingRadius();
+	            collision = centerDistance <= noCollisionDistance;
+	        }
+	        
+	        if(collision)
+	        {
+	            break;
+	        }
+	    }
+	    
+	    if(collision)
+	    {
+	        entity.collisionAction();
+	    }
+	    
+	    return collision;
 	}
 }
