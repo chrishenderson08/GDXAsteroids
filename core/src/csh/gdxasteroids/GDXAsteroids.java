@@ -29,6 +29,7 @@ public class GDXAsteroids extends ApplicationAdapter
     private Camera camera;
     private ShapeRenderer shapeRenderer;
     private List<Entity> entities;
+    private List<Entity> entitiesToAdd;
     private PlayerShip player;
 	
 	@Override
@@ -37,6 +38,7 @@ public class GDXAsteroids extends ApplicationAdapter
 	    camera = new OrthographicCamera();
 	    shapeRenderer = new ShapeRenderer();
 	    entities = new ArrayList<Entity>();
+	    entitiesToAdd = new ArrayList<Entity>();
 	    
 	    //Create player's ship.
 	    player = new PlayerShip(this);
@@ -60,12 +62,7 @@ public class GDXAsteroids extends ApplicationAdapter
 	    
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		
-		if(player.isFiring() && player.canShoot())
-		{
-		    player.shoot();
-		}
-		
+			
 		List<Integer> entityRemovalIndices = new ArrayList<Integer>();
 		for (int i = 0; i < entities.size(); i++)
         {
@@ -103,6 +100,13 @@ public class GDXAsteroids extends ApplicationAdapter
 		    Integer curRemovalIndex = entityRemovalIndices.get(i);
 		    entities.remove(curRemovalIndex.intValue());
 		}
+		
+		for (Entity curEntity : entitiesToAdd)
+		{
+		    entities.add(curEntity);
+		}
+		
+		entitiesToAdd.clear();
 	}
 	
 	@Override
@@ -125,15 +129,14 @@ public class GDXAsteroids extends ApplicationAdapter
 	
 	public void addEntity(Entity entity)
 	{
-	    if(entity != null)
+	    if (entity != null)
 	    {
-	        entities.add(entity);
+	        entitiesToAdd.add(entity);
 	    }
 	}
 	
 	private boolean checkCollisions(Entity entity)
 	{
-	    //TODO CSH Weird things going on with collision detection.
 	    boolean collision = false;
 	    
 	    for (Entity curCheckedEntity : entities)
@@ -149,13 +152,13 @@ public class GDXAsteroids extends ApplicationAdapter
 	            collision = centerDistance <= noCollisionDistance;
 	        }
 	        
-	        if(collision)
+	        if (collision)
 	        {
 	            break;
 	        }
 	    }
 	    
-	    if(collision)
+	    if (collision)
 	    {
 	        entity.collisionAction();
 	    }

@@ -2,6 +2,7 @@ package csh.gdxasteroids.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 import csh.gdxasteroids.GDXAsteroids;
@@ -36,17 +37,17 @@ public class Asteroid extends Entity
         float x = this.getX();
         float y = this.getY();
         
-        Vector2 vert0 = new Vector2(-1.2f, 0);
+        Vector2 vert0 = new Vector2(-1.6f, 0);
         vert0.scl(scaleFactor);
-        Vector2 vert1 = new Vector2(-1.1f, -1.1f);
+        Vector2 vert1 = new Vector2(-1.5f, -1.5f);
         vert1.scl(scaleFactor);
-        Vector2 vert2 = new Vector2(0.95f, -1.1f);
+        Vector2 vert2 = new Vector2(1.35f, -1.5f);
         vert2.scl(scaleFactor);
-        Vector2 vert3 = new Vector2(1.2f, 0f);
+        Vector2 vert3 = new Vector2(1.6f, 0f);
         vert3.scl(scaleFactor);
-        Vector2 vert4 = new Vector2(1.05f, 1.1f);
+        Vector2 vert4 = new Vector2(1.45f, 1.5f);
         vert4.scl(scaleFactor);
-        Vector2 vert5 = new Vector2(0f, 1.2f);
+        Vector2 vert5 = new Vector2(0f, 1.6f);
         vert5.scl(scaleFactor);
         
         Gdx.gl.glLineWidth(2);
@@ -77,7 +78,43 @@ public class Asteroid extends Entity
     @Override
     public void collisionAction()
     {
+        if (scaleFactor != SIZE_SMALL)
+        {
+            float newScaleFactor = scaleFactor;
+            if (scaleFactor > SIZE_MEDIUM)
+            {
+                newScaleFactor = SIZE_MEDIUM;
+            }
+            else if (scaleFactor > SIZE_SMALL)
+            {
+                newScaleFactor = SIZE_SMALL;
+            }
+            
+            GDXAsteroids engine = getEngine();
+            float x = getX();
+            float y = getY();
+            float orientation = getOrientation();
+            float[] velocity = getVelocity();
+            float speed = velocity[0] + velocity[1];
+            float angularVelocity = getAngularVelocity();
         
+            Entity newAsteroid1 = new Asteroid(engine, x, y, newScaleFactor);
+            float[] asteroid1Velocity = new float[2];
+            asteroid1Velocity[0] = -(MathUtils.sinDeg(orientation - 22.5f)) * speed;
+            asteroid1Velocity[1] = -(MathUtils.cosDeg(orientation - 22.5f)) * speed;
+            newAsteroid1.setVelocity(asteroid1Velocity);
+            newAsteroid1.setAngularVelocity(angularVelocity);
+            
+            Entity newAsteroid2 = new Asteroid(engine, x, y, newScaleFactor);
+            float[] asteroid2Velocity = new float[2];
+            asteroid2Velocity[0] = MathUtils.sinDeg(orientation + 22.5f) * speed;
+            asteroid2Velocity[1] = MathUtils.cosDeg(orientation + 22.5f) * speed;
+            newAsteroid2.setVelocity(asteroid2Velocity);
+            newAsteroid2.setAngularVelocity(angularVelocity);
+            
+            engine.addEntity(newAsteroid1);
+            engine.addEntity(newAsteroid2);
+        }
     }
 
     @Override

@@ -15,14 +15,12 @@ public class PlayerShip extends Entity
     public static final float BULLET_SPEED = 0.75f;
     public static final long SHOT_COOL_DOWN = 150; //Milliseconds
     
-    private boolean isFiring;
     private long lastShotTime;
     
     public PlayerShip(GDXAsteroids engine)
     {
         super(engine, GDXAsteroids.CAM_WIDTH / 2f, GDXAsteroids.CAM_HEIGHT / 2f * 0.75f);
         setResistanceFactor(SHIP_RESISTANCE);
-        isFiring = false;
         lastShotTime = 0;
         setBoundingRadius(1.8f);
     }
@@ -49,15 +47,6 @@ public class PlayerShip extends Entity
         shapeRenderer.end();
     }
     
-    public boolean canShoot()
-    {
-        long curTime = System.currentTimeMillis();
-        long timeElapsed = curTime - lastShotTime;
-        boolean canShoot = timeElapsed > SHOT_COOL_DOWN;
-        
-        return canShoot;
-    }
-    
     public void shoot()
     {
         float x0 = this.getX();
@@ -76,16 +65,6 @@ public class PlayerShip extends Entity
         
         GDXAsteroids engine = getEngine();
         engine.addEntity(newBullet);
-    }
-    
-    public boolean isFiring()
-    {
-        return isFiring;
-    }
-    
-    public void setFiring(boolean isFiring)
-    {
-        this.isFiring = isFiring;
     }
     
     private void drawShip(ShapeRenderer shapeRenderer)
