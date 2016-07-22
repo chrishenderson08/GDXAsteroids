@@ -9,6 +9,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
@@ -75,7 +76,8 @@ public class GDXAsteroids extends ApplicationAdapter
 	            execGameOverState();
 	            break;
 	            
-	        default:
+	        case PAUSED:
+	            execPausedState();
 	            break;
 	    }
 	}
@@ -225,6 +227,34 @@ public class GDXAsteroids extends ApplicationAdapter
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
         gameOverScreen.render(shapeRenderer, spriteBatch);
+	}
+	
+	private void execPausedState()
+	{
+	    spriteBatch.setProjectionMatrix(camera.combined);
+	    shapeRenderer.setProjectionMatrix(camera.combined);
+        
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        
+        for (Entity curEntity : entities)
+        {
+            curEntity.render(shapeRenderer);
+        }
+        
+        CharSequence paused = "Pau s ed";
+        BitmapFont font = new BitmapFont();
+        font.getData().setScale(0.4f);
+        
+        float x = GDXAsteroids.CAM_WIDTH * 0.35f;
+        float y = GDXAsteroids.CAM_HEIGHT * 0.7f * ((float)Gdx.graphics.getHeight() / (float)Gdx.graphics.getWidth());
+        
+        spriteBatch.begin();
+        
+        font.draw(spriteBatch, paused, x, y);
+        spriteBatch.end();
+        
+        font.dispose();
 	}
 	
 	private boolean checkCollisions(Entity entity)
