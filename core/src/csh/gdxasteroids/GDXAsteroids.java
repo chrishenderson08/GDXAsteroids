@@ -31,6 +31,7 @@ public class GDXAsteroids extends ApplicationAdapter
     private List<Entity> entities;
     private List<Entity> entitiesToAdd;
     private PlayerShip player;
+    private StageManager stageManager;
 	
 	@Override
 	public void create ()
@@ -44,11 +45,7 @@ public class GDXAsteroids extends ApplicationAdapter
 	    player = new PlayerShip(this);
 	    entities.add(player);
 	    
-	    //TEST ASTEROID
-	    Entity asteroid = new Asteroid(this, 75f, 25f);
-	    asteroid.setVelocity(new float[]{0.0f, 0.1f});
-	    asteroid.setAngularVelocity(2);
-	    entities.add(asteroid);
+	    stageManager = new StageManager(this);
 	    
 	    //Input.
 	    inputProcessor = new ShipInputAdapter(player);
@@ -62,7 +59,28 @@ public class GDXAsteroids extends ApplicationAdapter
 	    
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-			
+	    
+		boolean allAsteroidsSpawned = stageManager.allAsteroidsSpawned();
+		if (allAsteroidsSpawned)
+		{
+		    boolean asteroidFound = false;
+		    for (Entity curEntity : entities)
+		    {
+		        asteroidFound = curEntity instanceof Asteroid;
+		        if (asteroidFound)
+		        {
+		            break;
+		        }
+		    }
+		    
+		    if (!asteroidFound)
+		    {
+		        stageManager.initNextStage();
+		    }
+		}
+		
+		stageManager.evaluate();
+		
 		List<Integer> entityRemovalIndices = new ArrayList<Integer>();
 		for (int i = 0; i < entities.size(); i++)
         {
