@@ -51,6 +51,7 @@ public class Bullet extends Entity
     @Override
     public boolean canCollide(Entity entity)
     {
-        return true;
+        boolean canCollide = !(entity instanceof Bullet);
+        return canCollide;
     }
 }
