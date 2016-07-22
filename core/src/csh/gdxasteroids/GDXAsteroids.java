@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -16,7 +15,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import csh.gdxasteroids.entities.Asteroid;
 import csh.gdxasteroids.entities.Entity;
 import csh.gdxasteroids.entities.PlayerShip;
-import csh.gdxasteroids.entities.Renderable;
 import csh.gdxasteroids.io.GameOverInputAdapter;
 import csh.gdxasteroids.io.ShipInputAdapter;
 
@@ -40,6 +38,7 @@ public class GDXAsteroids extends ApplicationAdapter
     private PlayerShip player;
     private StageManager stageManager;
     private GameOverScreen gameOverScreen;
+    private GameSFX gameSFX;
 	
 	@Override
 	public void create ()
@@ -61,6 +60,8 @@ public class GDXAsteroids extends ApplicationAdapter
 	    gameOverScreen = new GameOverScreen(this);
 	    
 	    Gdx.input.setInputProcessor(new ShipInputAdapter(this, player));
+	    
+	    gameSFX = new GameSFX();
 	}
 
 	@Override
@@ -87,6 +88,7 @@ public class GDXAsteroids extends ApplicationAdapter
 	{
 	    shapeRenderer.dispose();
 	    spriteBatch.dispose();
+	    gameSFX.dispose();
 	}
 	
 	@Override
@@ -135,6 +137,11 @@ public class GDXAsteroids extends ApplicationAdapter
 	        initNewGame();
 	        Gdx.input.setInputProcessor(new ShipInputAdapter(this, player));
 	    }
+	}
+	
+	public GameSFX getSFX()
+	{
+	    return gameSFX;
 	}
 	
 	private void initNewGame()

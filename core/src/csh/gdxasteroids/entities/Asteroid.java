@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 import csh.gdxasteroids.GDXAsteroids;
+import csh.gdxasteroids.GameSFX;
 
 public class Asteroid extends Entity
 {
@@ -78,6 +79,8 @@ public class Asteroid extends Entity
     @Override
     public void collisionAction()
     {
+        GDXAsteroids engine = getEngine();
+        
         if (scaleFactor != SIZE_SMALL)
         {
             float newScaleFactor = scaleFactor;
@@ -90,7 +93,6 @@ public class Asteroid extends Entity
                 newScaleFactor = SIZE_SMALL;
             }
             
-            GDXAsteroids engine = getEngine();
             float x = getX();
             float y = getY();
             float orientation = getOrientation();
@@ -115,6 +117,9 @@ public class Asteroid extends Entity
             engine.addEntity(newAsteroid1);
             engine.addEntity(newAsteroid2);
         }
+        
+        GameSFX sfx = engine.getSFX();
+        sfx.playExplosion();
     }
 
     @Override

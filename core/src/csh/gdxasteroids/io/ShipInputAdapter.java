@@ -4,6 +4,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 
 import csh.gdxasteroids.GDXAsteroids;
+import csh.gdxasteroids.GameSFX;
 import csh.gdxasteroids.entities.PlayerShip;
 
 public class ShipInputAdapter extends InputAdapter
@@ -38,6 +39,8 @@ public class ShipInputAdapter extends InputAdapter
             case Keys.W:
             case Keys.UP:
                 playerShip.setAccelerationRate(PlayerShip.ACCELERATION_RATE);
+                GameSFX sfx = engine.getSFX();
+                sfx.playThruster();
                 break;
             case Keys.SPACE:
                 playerShip.shoot();
@@ -78,6 +81,8 @@ public class ShipInputAdapter extends InputAdapter
             case Keys.W:
             case Keys.UP:
                 playerShip.setAccelerationRate(0);
+                GameSFX sfx = engine.getSFX();
+                sfx.stopThruster();
                 break;
         }
         

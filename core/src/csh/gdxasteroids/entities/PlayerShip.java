@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 import csh.gdxasteroids.GDXAsteroids;
+import csh.gdxasteroids.GameSFX;
 
 public class PlayerShip extends Entity
 {
@@ -15,13 +16,10 @@ public class PlayerShip extends Entity
     public static final float BULLET_SPEED = 0.75f;
     public static final long SHOT_COOL_DOWN = 150; //Milliseconds
     
-    private long lastShotTime;
-    
     public PlayerShip(GDXAsteroids engine)
     {
         super(engine, GDXAsteroids.CAM_WIDTH / 2f, GDXAsteroids.CAM_HEIGHT / 2f * 0.75f);
         setResistanceFactor(SHIP_RESISTANCE);
-        lastShotTime = 0;
         setBoundingRadius(1.8f);
     }
     
@@ -61,10 +59,11 @@ public class PlayerShip extends Entity
         Bullet newBullet = new Bullet(getEngine(), x0, y0);
         newBullet.setVelocity(v0);
         
-        lastShotTime = System.currentTimeMillis();
-        
         GDXAsteroids engine = getEngine();
         engine.addEntity(newBullet);
+        
+        GameSFX sfx = engine.getSFX();
+        sfx.playLaser();
     }
     
     private void drawShip(ShapeRenderer shapeRenderer)
@@ -100,6 +99,9 @@ public class PlayerShip extends Entity
     {
         GDXAsteroids engine = getEngine();
         engine.toggleGameOver();
+        
+        GameSFX sfx = engine.getSFX();
+        sfx.playShipExplosion();
     }
 
     @Override

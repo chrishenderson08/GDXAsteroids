@@ -1,0 +1,6 @@
+All sound effects acquired from soundbible.com
+
+laser.mp3 - Mike Koenig - CC Attribution 3.0 (https://creativecommons.org/licenses/by/3.0/us/legalcode)
+explosion.mp3 - Mike Koenig - CC Attribution 3.0 (https://creativecommons.org/licenses/by/3.0/us/legalcode)
+shipExplosion.mp3 - ljudman - CC Sampling Plus 1.0 (https://creativecommons.org/licenses/sampling+/1.0/legalcode)
+thruster.mp3 - dobroride - CC Sampling Plus 1.0 (https://creativecommons.org/licenses/sampling+/1.0/legalcode)
