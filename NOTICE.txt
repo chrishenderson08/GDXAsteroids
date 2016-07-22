@@ -1,0 +1,12 @@
+GDXAsteroids
+Copyright 2016, Chris henderson
+
+This product was developed by Chris Henderson (chrishenderson08@gmail.com).
+GDXAsteroids is licensed under the Apache License Version 2.0.
+Source code is available on GitHub.com at https://github.com/chrishenderson08/GDXAsteroids.
+
+The software references/uses, but does not modify, the LibGDX game development framework.
+LibGDX is licensed under the Apache License Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html).
+Visit https://libgdx.badlogicgames.com/ for more information. LibGDX's source is available at
+https://github.com/libGDX/libGDX. LibGDX itself uses a variety of libraries/extensions. See the LibGDX
+licensing/source for more information.
