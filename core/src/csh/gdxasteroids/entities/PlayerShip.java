@@ -98,7 +98,8 @@ public class PlayerShip extends Entity
     @Override
     public void collisionAction()
     {
-        
+        GDXAsteroids engine = getEngine();
+        engine.toggleGameOver();
     }
 
     @Override

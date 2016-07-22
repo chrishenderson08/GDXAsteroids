@@ -3,14 +3,17 @@ package csh.gdxasteroids.io;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 
+import csh.gdxasteroids.GDXAsteroids;
 import csh.gdxasteroids.entities.PlayerShip;
 
 public class ShipInputAdapter extends InputAdapter
 {
+    private GDXAsteroids engine;
     private PlayerShip playerShip;
     
-    public ShipInputAdapter(PlayerShip playerShip)
+    public ShipInputAdapter(GDXAsteroids engine, PlayerShip playerShip)
     {
+        this.engine = engine;
         this.playerShip = playerShip;
     }
     
@@ -38,6 +41,9 @@ public class ShipInputAdapter extends InputAdapter
                 break;
             case Keys.SPACE:
                 playerShip.shoot();
+                break;
+            case Keys.ESCAPE:
+                engine.togglePause();
                 break;
         }
         

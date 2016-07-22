@@ -31,6 +31,13 @@ public class StageManager
         this.spawnRate = calcSpawnRate();
     }
     
+    public void initNewGame()
+    {
+        asteroidsSpawned = 0;
+        stageAsteroidCount = STARTING_ASTEROID_COUNT;
+        spawnRate = calcSpawnRate();
+    }
+    
     public void initNextStage()
     {
         asteroidsSpawned = 0;
