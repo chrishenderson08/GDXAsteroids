@@ -113,7 +113,7 @@ public class Asteroid extends Entity
             float y = getY();
             float orientation = getOrientation();
             float[] velocity = getVelocity();
-            float speed = Math.abs(velocity[0]) + Math.abs(velocity[1]);
+            float speed = (float)Math.sqrt(Math.pow(velocity[0], 2) + Math.pow(velocity[1], 2));
             float angularVelocity = getAngularVelocity();
         
             Entity newAsteroid1 = new Asteroid(engine, x, y, newScaleFactor);

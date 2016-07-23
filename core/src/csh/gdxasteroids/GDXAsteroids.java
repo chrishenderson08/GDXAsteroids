@@ -231,7 +231,10 @@ public class GDXAsteroids extends ApplicationAdapter
         for (int i = entityRemovalIndices.size() - 1; i >= 0; i--)
         {
             Integer curRemovalIndex = entityRemovalIndices.get(i);
-            entities.remove(curRemovalIndex.intValue());
+            if(curRemovalIndex < entities.size())
+            {
+                entities.remove(curRemovalIndex.intValue());
+            }
         }
         
         for (Entity curEntity : entitiesToAdd)
